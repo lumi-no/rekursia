@@ -1,0 +1,67 @@
+#include <iostream>
+
+using namespace std;
+
+
+int FibonacciMain(int n)
+{
+    if (n == 0)
+    {
+        return 0;
+    }
+
+    if (n == 1)
+    {
+        return 1;
+    }
+
+    return FibonacciMain(n - 1) + FibonacciMain(n - 2);
+}
+
+
+int FibonacciTail(int n, int a = 0, int b = 1)
+{
+    if (n == 0)
+    {
+        return a;
+    }
+
+    if (n == 1)
+    {
+        return b;
+    }
+
+    return FibonacciTail(n - 1, b, a + b);
+}
+
+
+int main()
+{
+    int n;
+
+    cout << "Введіть n: ";
+    cin >> n;
+
+    if (n < 0)
+    {
+        cout << "Помилка! n повинно бути >= 0";
+
+        return 0;
+    }
+
+    cout << endl;
+
+
+    int resultMain = FibonacciMain(n);
+
+    cout << "Головна рекурсія: ";
+    cout << "F(" << n << ") = " << resultMain << endl;
+
+
+    int resultTail = FibonacciTail(n);
+
+    cout << "Хвостова рекурсія: ";
+    cout << "F(" << n << ") = " << resultTail << endl;
+
+    return 0;
+}
