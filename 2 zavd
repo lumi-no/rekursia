@@ -1,0 +1,177 @@
+#include <iostream>
+using namespace std;
+
+struct Node
+{
+    int val;
+    Node* next;
+
+    Node(int value)
+    {
+        val = value;
+        next = nullptr;
+    }
+};
+
+
+Node* ReadList(int n)
+{
+    if (n == 0)
+    {
+        return nullptr;
+    }
+
+    int value;
+    cin >> value;
+
+    Node* node = new Node(value);
+    node->next = ReadList(n - 1);
+
+    return node;
+}
+
+
+void PrintList(Node* head)
+{
+    if (head == nullptr)
+    {
+        return;
+    }
+
+    cout << head->val;
+
+    if (head->next != nullptr)
+    {
+        cout << ",";
+    }
+
+    PrintList(head->next);
+}
+
+void Print(Node* head)
+{
+    cout << "[";
+
+    if (head != nullptr)
+    {
+        PrintList(head);
+    }
+
+    cout << "]";
+}
+
+
+Node* SwapPairsMain(Node* head)
+{
+    if (head == nullptr || head->next == nullptr)
+    {
+        return head;
+    }
+
+    Node* first = head;
+    Node* second = head->next;
+
+    first->next = SwapPairsMain(second->next);
+    second->next = first;
+
+    return second;
+}
+
+Node* SwapPairsTailHelper(Node* current, Node* previousTail, Node* newHead)
+{
+    if (current == nullptr)
+    {
+        return newHead;
+    }
+
+    if (current->next == nullptr)
+    {
+        if (previousTail != nullptr)
+        {
+            previousTail->next = current;
+        }
+
+        if (newHead == nullptr)
+        {
+            return current;
+        }
+
+        return newHead;
+    }
+
+    Node* first = current;
+    Node* second = current->next;
+    Node* nextPair = second->next;
+
+    second->next = first;
+    first->next = nullptr;
+
+    if (previousTail != nullptr)
+    {
+        previousTail->next = second;
+    }
+    else
+    {
+        newHead = second;
+    }
+
+    return SwapPairsTailHelper(nextPair, first, newHead);
+}
+
+Node* SwapPairsTail(Node* head)
+{
+    return SwapPairsTailHelper(head, nullptr, nullptr);
+}
+
+void DeleteList(Node* head)
+{
+    if (head == nullptr)
+    {
+        return;
+    }
+
+    DeleteList(head->next);
+    delete head;
+}
+
+
+int main()
+{
+    int n;
+
+    cout << "Введіть кількість вузлів: ";
+    cin >> n;
+
+    cout << "Введіть елементи списку: ";
+    Node* head1 = ReadList(n);
+
+    cout << "Початковий список: ";
+    Print(head1);
+    cout << endl;
+
+    Node* resultMain = SwapPairsMain(head1);
+
+    cout << "Головна рекурсія: ";
+    Print(resultMain);
+    cout << endl;
+
+    DeleteList(resultMain);
+
+    cout << endl;
+
+    cout << "Введіть кількість вузлів: ";
+    cin >> n;
+
+    cout << "Введіть елементи списку: ";
+    Node* head2 = ReadList(n);
+
+    Node* resultTail = SwapPairsTail(head2);
+
+    cout << "Хвостова рекурсія: ";
+    Print(resultTail);
+    cout << endl;
+
+    DeleteList(resultTail);
+
+    return 0;
+}
