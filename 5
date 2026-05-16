@@ -1,0 +1,74 @@
+#include <iostream>
+
+using namespace std;
+
+double PowMain(double x, int n)
+{
+    if (n == 0)
+    {
+        return 1;
+    }
+
+    if (n < 0)
+    {
+        return 1.0 / PowMain(x, -n);
+    }
+
+    return x * PowMain(x, n - 1);
+}
+
+double PowTail(double x, int n, double result = 1)
+{
+    if (n == 0)
+    {
+        return result;
+    }
+
+    if (n < 0)
+    {
+        return PowTail(x, n + 1, result / x);
+    }
+
+    return PowTail(x, n - 1, result * x);
+}
+
+
+int main()
+{
+    double x;
+    int n;
+
+    cout << "Введіть x: ";
+    cin >> x;
+
+    cout << "Введіть n: ";
+    cin >> n;
+
+    if (x <= -100.0  x >= 100.0)
+    {
+        cout << "Помилка! x повинно бути в межах (-100 ; 100)";
+
+        return 0;
+    }
+
+    if (!( x != 0  n > 0))
+    {
+        cout << "Помилка! x не дорівнює нулю або степінь більша за 0";
+
+        return 0;
+    }
+
+    double resultMain = PowMain(x, n);
+
+    cout << endl;
+
+    cout << "Головна рекурсія: ";
+    cout << resultMain << endl;
+
+    double resultTail = PowTail(x, n);
+
+    cout << "Хвостова рекурсія: ";
+    cout << resultTail << endl;
+
+    return 0;
+}
